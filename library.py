@@ -92,3 +92,4 @@ def main():
         print('Непредвиденная ошибка:', e)
         return            
 #errors
+main()
