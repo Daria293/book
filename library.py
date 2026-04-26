@@ -1,4 +1,12 @@
 import sys
+class LibraryErrors(Exception):
+    "Базовый класс ошибок библиотеки"
+class TextFilterEmpty(LibraryErrors):
+    "не передан текст фильтра"
+class InputError(LibraryErrors):
+    "передана кривая команда"
+class ParameterSortedError(LibraryErrors):
+    "Неправильный параметр сортировки"
 books = {"Ущелье дьявола": "А. Дюма", "Королева Марго": "А. Дюма", "Том Сойер": "Марк Твен", "Белый вождь": "Майн Рид", "Граф Монте Кристо": "А. Дюма"}
 
 def all_books(books):
@@ -49,4 +57,38 @@ elif action == "sort":
 else:
     print('Использование: python library.py <action> <arg> action: filter|sort arg: для filter — имя автора; для sort — "author" или "book"')
 
+def main():
+    try:
+        # Проверка аргументов
+        if len(sys.argv) < 2:
+            raise InputError("Не передан action")
+        action = sys.argv[1]
+
+        # Пример: для filter требуется второй аргумент
+        if action == 'filter':
+            if len(sys.argv) < 3:
+                raise TextFilterEmpty('не передан текст фильтра')
+            # Ваша логика фильтрации тут
+
+        elif action == 'sort':
+            if len(sys.argv) < 3:
+                raise ParameterSortedError('Неправильный параметр сортировки')
+            # Ваша логика сортировки тут
+
+        else:
+            raise InputError(f'Неизвестный action: {action}')
+
+    except TextFilterEmpty as e:
+        print('Ошибка фильтра:', e)
+        return
+    except ParameterSortedError as e:
+        print('Ошибка параметра сортировки:', e)
+        return
+    except InputError as e:
+        print('Ошибка ввода:', e)
+        return
+    except Exception as e:
+        # Общий обработчик неожиданных ошибок — полезен при отладке
+        print('Непредвиденная ошибка:', e)
+        return            
 
